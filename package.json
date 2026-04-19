@@ -1,13 +1,12 @@
 {
-  "name": "ghost-network-server",
+  "name": "ghost-dimension-server",
   "version": "1.0.0",
-  "main": "server.js",
-  "dependencies": {
-    "express": "^4.18.2",
-    "socket.io": "^4.7.2",
-    "cors": "^2.8.5"
-  },
+  "description": "Custom server for Ghost Dimension",
+  "main": "index.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "ws": "^8.16.0"
   }
 }

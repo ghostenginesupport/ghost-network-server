@@ -1,23 +1,45 @@
-const WebSocket = require('ws');
+const express = require('express');
 const http = require('http');
+const { Server } = require('socket.io');
 
-const server = http.createServer();
-const wss = new WebSocket.Server({ server });
+const app = express();
+const server = http.createServer(app);
 
-wss.on('connection', (ws) => {
-    console.log('Nawa player Ghost Dimension vich aagya!');
+// CORS allow karna zaroori hai taaki germs.io ton connection aa sake
+const io = new Server(server, {
+    cors: {
+        origin: "*", 
+        methods: ["GET", "POST"]
+    }
+});
 
-    ws.on('message', (data) => {
-        // Binary packets nu forward karna (Agar.io/Germs.io protocol)
-        // Ithe apan physics te movement control kar sakde haan
-        wss.clients.forEach(client => {
-            if (client !== ws && client.readyState === WebSocket.OPEN) {
-                client.send(data);
-            }
-        });
+app.get('/', (req, res) => {
+    res.send('Ghost Dimension Sync Server is Online!');
+});
+
+io.on('connection', (socket) => {
+    console.log('🟢 GHOST CONNECTED:', socket.id);
+
+    // Jadon koi player private room join karda hai
+    socket.on('join_dimension', (roomCode) => {
+        socket.join(roomCode);
+        console.log(`[${socket.id}] joined dimension: ${roomCode}`);
+    });
+
+    // Jadon script game ton position te video skin link sniff karke bhejdi hai
+    socket.on('sync_ghost_data', (data) => {
+        // data = { room: "ManjeetVIP", name: "lol..", x: 100, y: 200, skinUrl: "video.mp4" }
+        
+        // Baki sab players nu eh data bhej do jo usay room vich ne
+        socket.to(data.room).emit('ghost_update', data);
+    });
+
+    socket.on('disconnect', () => {
+        console.log('🔴 GHOST DISCONNECTED:', socket.id);
     });
 });
 
-server.listen(process.env.PORT || 3000, () => {
-    console.log('Ghost Server 3000 port te chal reha hai');
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => {
+    console.log(`Ghost Server running on port ${PORT}`);
 });

@@ -1,7 +1,7 @@
 {
-  "name": "ghost-dimension-server",
+  "name": "ghost-sync-server",
   "version": "1.0.0",
-  "description": "Sync Server for Ghost Dimension",
+  "description": "Live Sync Server for Ghost Engine",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"

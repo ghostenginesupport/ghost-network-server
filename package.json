@@ -1,13 +1,12 @@
 {
-  "name": "ghost-sync-server",
+  "name": "ghost-network",
   "version": "1.0.0",
-  "description": "Live Sync Server for Ghost Engine",
+  "description": "Ghost Engine Sync Server",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
   },
   "dependencies": {
-    "express": "^4.18.2",
     "socket.io": "^4.7.2"
   }
 }
